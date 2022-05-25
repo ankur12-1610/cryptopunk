@@ -8,17 +8,22 @@ import Main from '../components/main.tsx'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { ThirdwebSDK } from '@thirdweb-dev/sdk'
+import Cors from 'cors'
 
 const sdk = new ThirdwebSDK("rinkeby");
 const contract = sdk.getNFTCollection("0x157138C7B970CdfCca3F53eA810aAD52769E5013");
 
 export default function Home() {
+  const cors = Cors({
+    methods: ['GET', 'HEAD', 'OPTIONS'],
+  })
   const [punkListData, setPunkListData] = useState([])
   const [selectedPunk, setSelectedPunk] = useState(0)
   useEffect(() => {
     const getMyNfts = async () => {
       const openseaData = await axios.get(
-        'https://testnets-api.opensea.io/assets?asset_contract_address=0x157138C7B970CdfCca3F53eA810aAD52769E5013&order_direction=desc'
+        'https://testnets-api.opensea.io/assets?asset_contract_address=0x157138C7B970CdfCca3F53eA810aAD52769E5013&order_direction=desc',
+        { crossdomain: true }
       )
       console.log(openseaData.data.assets)
       setPunkListData(openseaData.data.assets)
